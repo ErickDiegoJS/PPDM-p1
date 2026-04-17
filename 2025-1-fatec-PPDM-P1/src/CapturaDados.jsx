@@ -1,31 +1,20 @@
 import { useState } from 'react';
 
-const CapturaDados = ({ prop }) => {
-  const [valorInicial, setValorInicial] = useState('')
-  const [aporteMensal, setAporteMensal] = useState('')
-  const [taxaJuros, setTaxaJuros] = useState('')
-  const [periodo, setPeriodo] = useState('')
+const CapturaDados = ({ setValorInicial, setAporteMensal, setTaxaJuros, setPeriodo, calcularResultado }) => {
+  const [valorInicialEntrada, setValorInicialEntrada] = useState("")
+  const [aporteMensalEntrada, setAporteMensalEntrada] = useState("")
+  const [taxaJurosEntrada, setTaxaJurosEntrada] = useState("")
+  const [periodoEntrada, setPeriodoEntrada] = useState("")
 
-  const calcularTudo = () => {
-    const vI = parseFloat(valorInicial) || 0
-    const aM = parseFloat(aporteMensal) || 0
-    const tJ = parseFloat(taxaJuros) / 100 || 0
-    const p = parseInt(periodo) || 0
-
-    prop({
-      valorFinalAcumulado: vI * (1 + tJ) ** p + aM * (((1 + tJ) ** p - 1) / tJ),
-      totalInvestido: vI + (aM * p),
-      jurosAcumulados: (vI * (1 + tJ) ** p + aM * (((1 + tJ) ** p - 1) / tJ)) - (vI + aM * p),
-      aportes: p,
-      rentabilidade: ((vI * (1 + tJ) ** p + aM * (((1 + tJ) ** p - 1) / tJ)) - (vI + aM * p)) / (vI + aM * p) * 100
-    })
-  }
-
-  const limpar = () => {
-    setValorInicial('');
-    setAporteMensal('');
-    setTaxaJuros('');
-    setPeriodo('');
+  const limparEntrada = () => {
+    setValorInicialEntrada("");
+    setValorInicial(0)
+    setAporteMensalEntrada("");
+    setAporteMensal(0)
+    setTaxaJurosEntrada("");
+    setTaxaJuros(0)
+    setPeriodoEntrada("");
+    setPeriodo(0)
   };
 
   return (
@@ -34,29 +23,45 @@ const CapturaDados = ({ prop }) => {
         <div className="col-6 mb-2">
           <p className="text-muted small mb-0">Valor inicial (R$)</p>
           <input type="text" className="border rounded card-header p-1"
-            value={valorInicial} onChange={(e) => setValorInicial(e.target.value)} />
+            value={valorInicialEntrada}
+            onChange={(e) => {
+              setValorInicialEntrada(e.target.value)
+              setValorInicial(parseInt(e.target.value) || 0)
+            }} />
         </div>
         <div className="col-6 mb-2">
           <p className="text-muted small mb-0">Aporte mensal (R$)</p>
           <input type="text" className="border rounded card-header p-1"
-            value={aporteMensal} onChange={(e) => setAporteMensal(e.target.value)} />
+            value={aporteMensalEntrada}
+            onChange={(e) => {
+              setAporteMensalEntrada(e.target.value)
+              setAporteMensal(parseInt(e.target.value) || 0)
+            }} />
         </div>
       </div>
       <div className="d-flex">
         <div className="col-6 mb-2">
           <p className="text-muted small mb-0">Taxa de juros (% ao mês)</p>
           <input type="text" className="border rounded card-header p-1"
-            value={taxaJuros} onChange={(e) => setTaxaJuros(e.target.value)} />
+            value={taxaJurosEntrada}
+            onChange={(e) => {
+              setTaxaJurosEntrada(e.target.value)
+              setTaxaJuros(parseInt(e.target.value) / 100 || 0)
+            }} />
         </div>
         <div className="col-6 mb-2">
           <p className="text-muted small mb-0">Periodo (meses)</p>
           <input type="text" className="border rounded card-header p-1"
-            value={periodo} onChange={(e) => setPeriodo(e.target.value)} />
+            value={periodoEntrada}
+            onChange={(e) => {
+              setPeriodoEntrada(e.target.value)
+              setPeriodo(parseInt(e.target.value) || 0)
+            }} />
         </div>
       </div>
       <div className="d-flex">
-        <button onClick={calcularTudo} style={{ backgroundColor: '#e0e8f3', color: '#3984ee' }} className="btn btn-primary col-8 border-1 rounded me-1  p-1"> Calcular</button>
-        <button onClick={limpar} className="btn btn-danger col-3 border rounded card-header p-1">Limpar</button>
+        <button onClick={calcularResultado} style={{ backgroundColor: '#e0e8f3', color: '#3984ee' }} className="btn btn-primary col-8 border-1 rounded me-1  p-1">Calcular</button>
+        <button onClick={limparEntrada} className="btn btn-danger col-3 border rounded card-header p-1">Limpar</button>
       </div>
     </div>
   )
